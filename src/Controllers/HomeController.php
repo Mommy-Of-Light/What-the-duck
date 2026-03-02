@@ -20,7 +20,8 @@ class HomeController extends BaseController
      * @return Response
      */
     public function index(Request $request, Response $response): Response
-    {if (!UserService::isConnected()) {
+    {
+        if (!UserService::isConnected()) {
             return UserService::unAuthorized($response, $request, $this->view);
         }
 
@@ -152,66 +153,6 @@ class HomeController extends BaseController
             'reveal' => false,
         ]);
     }
-
-    // if ($request->getMethod() === 'POST') {
-    //     $parsedBody = $request->getParsedBody();
-    //     if (isset($parsedBody['reveal'])) {
-    //         $_SESSION['reveal'] = true;
-    //     }
-    //     return $response
-    //         ->withHeader('Location', '/')
-    //         ->withStatus(302);
-    // }
-
-    // if (!isset($_SESSION['joke']) || ($_SESSION['reveal'] ?? false) === true) {
-    //     $jokeUrl = 'https://v2.jokeapi.dev/joke/Any';
-
-    //     $ch = curl_init($jokeUrl);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    //     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-
-    //     $responseJoke = curl_exec($ch);
-
-    //     if ($responseJoke === false) {
-    //         die('Curl error: ' . curl_error($ch));
-    //     }
-
-    //     var_dump($responseJoke);
-    //     die();  
-
-    //     if (curl_errno($ch)) {
-    //         $_SESSION['joke'] = [
-    //             'type' => 'single',
-    //             'joke' => 'Error fetching joke 😢'
-    //         ];
-    //     } else {
-    //         $decoded = json_decode($responseJoke, true);
-
-    //         if (json_last_error() === JSON_ERROR_NONE) {
-    //             $_SESSION['joke'] = $decoded;
-    //         } else {
-    //             $_SESSION['joke'] = [
-    //                 'type' => 'single',
-    //                 'joke' => 'Invalid joke response.'
-    //             ];
-    //         }
-    //     }
-
-    //     curl_close($ch);
-
-    //     $_SESSION['reveal'] = false;
-    // }
-
-    // $joke = $_SESSION['joke'];
-    // $reveal = $_SESSION['reveal'];
-
-    // return $this->view->render($response, 'home/home.php', [
-    //     'title' => 'WhatTheDuck | Home',
-    //     'joke' => $joke,
-    //     'reveal' => $reveal,
-    // ]);
 
     public function profile(Request $request, Response $response): Response
     {
