@@ -28,17 +28,17 @@ $errorMiddleware->setErrorHandler(
     }
 );
 
-$errorMiddleware->setDefaultErrorHandler(function ($request, $exception, $displayErrorDetails) {
-    $response = new \Slim\Psr7\Response();
-    $view = new PhpRenderer(__DIR__ . '/../views');
-    $view->setLayout("layout.php");
+// $errorMiddleware->setDefaultErrorHandler(function ($request, $exception, $displayErrorDetails) {
+//     $response = new \Slim\Psr7\Response();
+//     $view = new PhpRenderer(__DIR__ . '/../views');
+//     $view->setLayout("layout.php");
 
-    return $view->render($response->withStatus(500), 'errors/500.php', [
-        'withMenu' => false,
-        'title' => 'Erreur interne du serveur',
-        'message' => $displayErrorDetails ? $exception->getMessage() : 'Une erreur est survenue',
-    ]);
-});
+//     return $view->render($response->withStatus(500), 'errors/500.php', [
+//         'withMenu' => false,
+//         'title' => 'Erreur interne du serveur',
+//         'message' => $displayErrorDetails ? $exception->getMessage() : 'Une erreur est survenue',
+//     ]);
+// });
 
 require __DIR__ . '/../routes/web.php';
 
