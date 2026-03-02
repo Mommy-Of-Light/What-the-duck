@@ -1,31 +1,29 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1deb3
--- https://www.phpmyadmin.net/
---
--- Hôte : localhost:3306
--- Généré le : lun. 26 jan. 2026 à 10:07
--- Version du serveur : 10.11.14-MariaDB-0ubuntu0.24.04.1
--- Version de PHP : 8.4.17
+DROP DATABASE IF EXISTS jokes;
+CREATE DATABASE jokes;
+USE jokes;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de données : `jokes`
---
-
--- --------------------------------------------------------
-
---
--- Structure de la table `Users`
---
+CREATE TABLE `settings` (
+  `idSettings` int(10) UNSIGNED NOT NULL,
+  `idUser` int(10) UNSIGNED NOT NULL,
+  `category_any` tinyint(1) NOT NULL DEFAULT 1,
+  `category_programming` tinyint(1) NOT NULL DEFAULT 0,
+  `category_misc` tinyint(1) NOT NULL DEFAULT 0,
+  `category_dark` tinyint(1) NOT NULL DEFAULT 0,
+  `category_pun` tinyint(1) NOT NULL DEFAULT 0,
+  `category_spooky` tinyint(1) NOT NULL DEFAULT 0,
+  `category_christmas` tinyint(1) NOT NULL DEFAULT 0,
+  `language_code` enum('cs','de','en','es','fr','pt') NOT NULL,
+  `blacklist_nsfw` tinyint(1) NOT NULL DEFAULT 0,
+  `blacklist_religious` tinyint(1) NOT NULL DEFAULT 0,
+  `blacklist_political` tinyint(1) NOT NULL DEFAULT 0,
+  `blacklist_racist` tinyint(1) NOT NULL DEFAULT 0,
+  `blacklist_sexist` tinyint(1) NOT NULL DEFAULT 0,
+  `blacklist_explicit` tinyint(1) NOT NULL DEFAULT 0,
+  `safe_mode` tinyint(1) NOT NULL DEFAULT 0,
+  `allow_single` tinyint(1) NOT NULL DEFAULT 1,
+  `allow_two_part` tinyint(1) NOT NULL DEFAULT 0,
+  `joke_amount` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
+);
 
 CREATE TABLE `Users` (
   `idUser` int(10) UNSIGNED NOT NULL,
@@ -37,36 +35,48 @@ CREATE TABLE `Users` (
   `profilePicture` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `Users`
---
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`idSettings`),
+  ADD KEY `fk_settings_user` (`idUser`);
 
-INSERT INTO `Users` (`idUser`, `firstName`, `lastName`, `userName`, `email`, `password`, `profilePicture`) VALUES
-(1, 'Dev', 'Admin', 'Creator', 'empress.mommy.of.light@gmail.com', '$2y$12$SGXqhatyumUKbSPjHK5o5.YiZpKvnZJO7JdUyu46/NXd6JU8/IWWK', 'Creator_pfp.png');
-
---
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `Users`
---
 ALTER TABLE `Users`
   ADD PRIMARY KEY (`idUser`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `username` (`userName`);
 
---
--- AUTO_INCREMENT pour les tables déchargées
---
+ALTER TABLE `settings`
+  MODIFY `idSettings` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT pour la table `Users`
---
 ALTER TABLE `Users`
-  MODIFY `idUser` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-COMMIT;
+  MODIFY `idUser` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+ALTER TABLE `settings`
+  ADD CONSTRAINT `fk_settings_user` FOREIGN KEY (`idUser`) REFERENCES `Users` (`idUser`) ON DELETE CASCADE,
+  ADD CONSTRAINT chk_joke_amount
+        CHECK (joke_amount BETWEEN 1 AND 10),
+
+   ADD CONSTRAINT chk_joke_type
+        CHECK (allow_single = TRUE OR allow_two_part = TRUE),
+
+   ADD CONSTRAINT chk_category_logic
+        CHECK (
+            (category_any = TRUE AND
+                category_programming = FALSE AND
+                category_misc = FALSE AND
+                category_dark = FALSE AND
+                category_pun = FALSE AND
+                category_spooky = FALSE AND
+                category_christmas = FALSE
+            )
+            OR
+            (category_any = FALSE AND
+                (
+                    category_programming = TRUE OR
+                    category_misc = TRUE OR
+                    category_dark = TRUE OR
+                    category_pun = TRUE OR
+                    category_spooky = TRUE OR
+                    category_christmas = TRUE
+                )
+            )
+        )
