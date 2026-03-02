@@ -23,5 +23,8 @@
         "slim/slim": "^4.0",
         "slim/psr7": "^1.8",
         "slim/php-view": "^3.4"
+    },
+    "scripts": {
+        "start": "php -S localhost:8080 -t public"
     }
 }
