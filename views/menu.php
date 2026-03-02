@@ -19,6 +19,12 @@
                             href="/profile"><?= htmlspecialchars($_SESSION['user']->userName) ?></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-light" href="/jokes">Jokes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="/settings">Settings</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-light" href="/logout">Logout</a>
                     </li>
                 <?php else: ?>
