@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WhatTheDuck\Models;
+namespace Models;
 
-use WhatTheDuck\Core\Database;
+use Core\Database;
+use Models\Settings;
 
 class User extends AbstractModel
 {
@@ -178,8 +179,12 @@ class User extends AbstractModel
         $success = $stmt->execute();
 
         if ($success) {
-            $this->userId = (int) Database::connection()->lastInsertId();
+            $this->idUser = (int) Database::connection()->lastInsertId();
         }
+
+        $defaultSettings = new Settings();
+        $defaultSettings->idUser = $this->idUser;
+        $defaultSettings->insert();
 
         return $success;
     }
