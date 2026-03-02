@@ -62,7 +62,7 @@ This project follows a custom **MVC (Model–View–Controller)** pattern:
 ### Clone the Repository
 
 ```bash
-git clone git@github.com:Mommy-Of-Light/What-the-duck.git
+git clone [git@github.com:Mommy-Of-Light/What-the-duck.git](https://github.com/Mommy-Of-Light/What-the-duck.git)
 cd What-the-duck
 ```
 
